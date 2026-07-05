@@ -1,5 +1,7 @@
-package com.atman.server.OrderModule;
+package com.atman.server.OrderModule.Entity;
 
+import com.atman.server.OrderModule.Enum.DeliverySession;
+import com.atman.server.OrderModule.Enum.MilkType;
 import com.atman.server.UserModule.Entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
