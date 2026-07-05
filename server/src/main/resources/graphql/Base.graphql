@@ -1,0 +1,34 @@
+scalar DateTime
+
+
+interface Node {
+    id: ID!
+    createdAt: DateTime!
+    updatedAt: DateTime!
+}
+
+enum SortOrder{
+    ASC
+    DESC
+}
+
+type PageInfo{
+    hasNextPage: Boolean!
+    hasPreviousPage: Boolean!
+    startCursor: String
+    endCursor: String
+}
+
+type ErrorStack{
+    field : String!
+    message :  String!
+}
+
+type ErrorResponse{
+    status : Int!
+    message : String!
+    errorStack : ErrorStack
+}
+
+type Query{}
+type Mutation {}
