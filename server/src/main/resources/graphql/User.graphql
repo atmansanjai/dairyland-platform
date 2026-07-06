@@ -64,8 +64,27 @@ extend type Query {
     user(input : UserQuery):UserResponse!
 }
 
+type DeleteUserResponse{
+    id : ID
+    error : ErrorResponse
+}
+
+input UpdateUserDetailsInput{
+    id : ID!
+    username : String!
+}
+
+input UpdateAccountStatusInput{
+    id : ID!
+    accountStatus : AccountStatus!
+}
+
+input DeleteUserInput{
+    id : ID!
+}
+
 extend type Mutation {
-    updateAccountStatus(id : ID! accountStatus : AccountStatus!) : UserResponse!
-    removeUser(id:ID!) : ID
-    updateUserDetails(id : ID!) :  UserResponse!
+    updateAccountStatus(input : UpdateAccountStatusInput!) : UserResponse!
+    deleteUser(input : DeleteUserInput) : DeleteUserResponse!
+    updateUserDetails(input : UpdateUserDetailsInput!) :  UserResponse!
 }

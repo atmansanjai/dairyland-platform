@@ -23,7 +23,6 @@ import java.util.UUID;
 @SuperBuilder
 public class OrderEntity extends BaseEntity {
 
-
     @Column(name = "customer_id")
     private UUID customerId;
 

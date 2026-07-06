@@ -1,0 +1,115 @@
+enum OrderStatus{
+    PENDING,
+    SHIPPED,
+    DELIVERED,
+    CANCELLED
+}
+
+enum PaymentStatus{
+    UNPAID,
+    PAID,
+    HALF_PAID
+}
+
+enum MilkType{
+    COW,
+    BUFFALO
+}
+
+enum OrderedSession{
+    MORNING,
+    EVENING,
+    BOTH
+}
+
+type OrderedMilk{
+    milkType : MilkType!
+    orderedQuantity : Float!
+    orderPrice : Float!
+    orderedSession : OrderedSession!
+}
+
+type Order implements Node{
+    id: ID!
+    deliveredTo : ID!
+    deliveredBy : ID!
+    orderedMilk : [OrderedMilk!]!
+    orderStatus : OrderStatus!
+    paymentStatus : PaymentStatus!
+    createdAt: DateTime!
+    updatedAt: DateTime!
+}
+
+input OrderFilter{
+    deliveredTo : ID
+    deliveredBy : ID
+    orderStatus : OrderStatus
+    paymentStatus : PaymentStatus
+}
+
+
+enum OrderSortField{
+    CREATED_AT
+}
+
+input OrderSort{
+    order : SortOrder
+    field : OrderSortField
+}
+
+
+type OrderEdge{
+    cursor : String!
+    node : Order!
+}
+
+type OrderConnection{
+    edges : [OrderEdge!]!
+    pageInfo : PageInfo!
+    totalCount : Int!
+}
+
+type OrderResponse{
+    order : Order
+    error  : ErrorResponse
+}
+
+input OrderLookupInput{
+    id : ID
+}
+
+extend type Query{
+    orders(    first : Int
+        last : Int
+        after : String
+        before: String
+        filter : OrderFilter
+        search : String
+        sort : OrderSort) : OrderConnection!
+    order(input : OrderLookupInput!) : OrderResponse!
+}
+
+input UpdateOrderStatusInput{
+    id :ID!
+    orderStatus : OrderStatus!
+}
+input UpdateOrderPaymentStatusInput{
+    id :ID!
+    paymentStatus : PaymentStatus!
+}
+
+input DeleteOrderInput{
+    id : ID!
+}
+
+type DeleteOrderResponse{
+    id : ID
+    error : ErrorResponse
+}
+
+extend type Mutation {
+    updateOrderStatus(input : UpdateOrderStatusInput!) : OrderResponse!
+    updateOrderPaymentStatus(input : UpdateOrderPaymentStatusInput!) : OrderResponse!
+    deleteOrder(input : DeleteOrderInput):  DeleteOrderResponse!
+}
+
