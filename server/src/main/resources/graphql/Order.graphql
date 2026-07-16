@@ -16,17 +16,35 @@ enum MilkType{
     BUFFALO
 }
 
-enum OrderedSession{
+enum Session{
     MORNING,
     EVENING,
     BOTH
 }
 
-type OrderedMilk{
+type OrderedMilk implements Node{
+    id: ID!
     milkType : MilkType!
     orderedQuantity : Float!
-    orderPrice : Float!
-    orderedSession : OrderedSession!
+    orderedMilkPrice : Float!
+    orderedSession : Session!
+    createdAt: DateTime!
+    updatedAt: DateTime!
+}
+
+enum PaymentMethod{
+    GOOGLE_PAY, CREDIT_CARD, CASH_ON_DELIVERY
+}
+type Invoice implements Node{
+    id: ID!
+    user : User!
+    totalAmount : Float!
+    paymentStatus : PaymentStatus!
+    balanceAmount : Float!
+    paidAmount : Float!
+    paymentMethod : PaymentMethod
+    createdAt: DateTime!
+    updatedAt: DateTime!
 }
 
 type Order implements Node{
@@ -34,8 +52,8 @@ type Order implements Node{
     deliveredTo : ID!
     deliveredBy : ID!
     orderedMilk : [OrderedMilk!]!
+    orderPrice : Float!
     orderStatus : OrderStatus!
-    paymentStatus : PaymentStatus!
     createdAt: DateTime!
     updatedAt: DateTime!
 }
@@ -44,12 +62,14 @@ input OrderFilter{
     deliveredTo : ID
     deliveredBy : ID
     orderStatus : OrderStatus
-    paymentStatus : PaymentStatus
+    fromDate : Date
+    toDate : Date
 }
 
 
 enum OrderSortField{
     CREATED_AT
+    ORDER_PRICE
 }
 
 input OrderSort{
@@ -78,6 +98,79 @@ input OrderLookupInput{
     id : ID
 }
 
+type InvoiceEdge{
+    cursor : String!
+    node : Invoice!
+}
+
+type InvoiceConnection{
+    edges : [InvoiceEdge!]
+    pageInfo : PageInfo
+    totalCount : Int
+    error : ErrorResponse
+}
+
+input InvoiceFilter{
+    paymentMethod : PaymentMethod
+    paymentStatus : PaymentStatus
+    fromDate : Date
+    toDate : Date
+}
+
+enum InvoiceSortField{
+    TOTAL_AMOUNT,
+    BALANCE_AMOUNT,
+    CREATED_AT
+}
+
+input InvoiceSort{
+    order : SortOrder
+    field : InvoiceSortField
+}
+
+type OrderedMilkEdges{
+    cursor : String!
+    node : OrderedMilk!
+}
+
+type OrderedMilkConnection{
+    edges : [OrderedMilkEdges!]
+    pageInfo : PageInfo
+    totalCount : Int
+    error : ErrorResponse
+}
+
+input OrderedMilkFilter{
+    orderedSession : Session
+    orderedMilkType : MilkType
+    fromDate : Date
+    toDate : Date
+}
+
+enum OrderedMilkSortField{
+    ORDERED_PRICE,
+    CREATED_AT,
+    ORDERED_QUANTITY
+}
+
+input OrderedMilkSort{
+    order : SortOrder
+    field : OrderedMilkSortField
+}
+
+type OrderMilkResponse{
+    orderedMilk : OrderedMilk
+    error : ErrorResponse
+}
+
+input OrderedMilkLookupInput{
+    id : ID!
+}
+
+input InvoiceLookupInput{
+    id : ID!
+}
+
 extend type Query{
     orders(    first : Int
         last : Int
@@ -87,29 +180,59 @@ extend type Query{
         search : String
         sort : OrderSort) : OrderConnection!
     order(input : OrderLookupInput!) : OrderResponse!
+    orderedMilks(
+        first : Int
+        last : Int
+        after : String
+        before: String
+        filter : OrderFilter
+        search : String
+        sort : OrderSort
+    ): OrderedMilkConnection!
+    orderedMilk(input : OrderedMilkLookupInput!):OrderMilkResponse!
+    invoices(
+        first : Int
+        last : Int
+        after : String
+        before: String
+        filter : InvoiceFilter
+        search : String
+        sort : InvoiceSort
+    ) : InvoiceConnection!
+    invoice(input : InvoiceLookupInput!): InvoiceResponse!
 }
 
 input UpdateOrderStatusInput{
     id :ID!
     orderStatus : OrderStatus!
 }
-input UpdateOrderPaymentStatusInput{
-    id :ID!
-    paymentStatus : PaymentStatus!
-}
 
-input DeleteOrderInput{
+input UpdateInvoiceInput{
     id : ID!
+    totalAmount : Float!
+    paymentStatus : PaymentStatus!
+    paidAmount : Float!
+    paymentMethod : PaymentMethod
 }
 
-type DeleteOrderResponse{
-    id : ID
+type InvoiceResponse{
+    invoice : Invoice
     error : ErrorResponse
+}
+
+input UpdateOrderedMilkInput{
+    id : ID!
+    milkType : MilkType!
+    orderedQuantity : Float!
+    orderedSession : Session!
 }
 
 extend type Mutation {
     updateOrderStatus(input : UpdateOrderStatusInput!) : OrderResponse!
-    updateOrderPaymentStatus(input : UpdateOrderPaymentStatusInput!) : OrderResponse!
-    deleteOrder(input : DeleteOrderInput):  DeleteOrderResponse!
+    deleteOrder(input : ID!):  OrderResponse!
+    updateOrderedMilk(input : UpdateOrderedMilkInput!) : OrderResponse!
+    deleteOrderedMilk(input : ID!):  OrderResponse!
+    updateInvoice(input : UpdateInvoiceInput) : InvoiceResponse!
+    deleteInvoice(input : ID!) : InvoiceResponse!
 }
 

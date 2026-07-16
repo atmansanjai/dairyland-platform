@@ -1,5 +1,5 @@
 scalar DateTime
-
+scalar Date
 
 interface Node {
     id: ID!

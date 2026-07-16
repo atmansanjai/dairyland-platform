@@ -19,15 +19,18 @@ type User implements Node{
 input UserFilter{
     accountStatus : AccountStatus
     userRole : UserRole
+    fromDate : Date
+    toDate : Date
 }
 
 enum UserSortField{
-    username
+    USERNAME
+    CREATED_AT
 }
 
 input userSort{
-    order : SortOrder
-    field : UserSortField
+    order : SortOrder!
+    field : UserSortField!
 }
 
 type UserEdge{
@@ -36,9 +39,10 @@ type UserEdge{
 }
 
 type UserConnection{
-    edges : [UserEdge!]!
-    pageInfo : PageInfo!
-    totalCount : Int!
+    edges : [UserEdge!]
+    pageInfo : PageInfo
+    totalCount : Int
+    error : ErrorResponse
 }
 
 input UserQuery{
@@ -64,27 +68,16 @@ extend type Query {
     user(input : UserQuery):UserResponse!
 }
 
-type DeleteUserResponse{
-    id : ID
-    error : ErrorResponse
-}
 
 input UpdateUserDetailsInput{
     id : ID!
-    username : String!
+    username : String
+    accountStatus : AccountStatus
 }
 
-input UpdateAccountStatusInput{
-    id : ID!
-    accountStatus : AccountStatus!
-}
 
-input DeleteUserInput{
-    id : ID!
-}
 
 extend type Mutation {
-    updateAccountStatus(input : UpdateAccountStatusInput!) : UserResponse!
-    deleteUser(input : DeleteUserInput) : DeleteUserResponse!
+    deleteUser(input : ID!) : UserResponse!
     updateUserDetails(input : UpdateUserDetailsInput!) :  UserResponse!
 }

@@ -1,11 +1,11 @@
 spring:
   application:
     name: server
-    security :
-      jwt :
-        secret-key :  404e635266556a586e3272357538782f413f4428472b4b6250645367566b5970
-        token-expiration : 3600000
-        refresh-token-expiration : 604800000
+    security:
+      jwt:
+        secret-key: 404e635266556a586e3272357538782f413f4428472b4b6250645367566b5970
+        token-expiration: 3600000
+        refresh-token-expiration: 604800000
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/postgres
@@ -15,4 +15,6 @@ spring:
     show-sql: true
     open-in-view: false
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
+server:
+  port: 8080

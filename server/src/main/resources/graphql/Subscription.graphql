@@ -1,0 +1,171 @@
+type Subscription implements Node{
+    id: ID!
+    user  : User!
+    subscriptionBillingCycle : BillingCycle!
+    subscribedMilk : [SubscribedMilk!]!
+    subscriptionStatus : SubscriptionStatus!
+    subscriptionPrice  : Float!
+    createdAt: DateTime!
+    updatedAt: DateTime!
+}
+
+
+enum BillingCycle{
+    DAILY,
+    WEEKLY,
+    MONTHLY
+}
+
+enum SubscriptionStatus{
+    ACTIVE,INACTIVE,SUSPEND
+}
+
+type SubscribedMilk implements Node{
+    id: ID!
+    subscribedMilkType : MilkType!
+    subscribedQuantity : Float!
+    subscribedSession : Session!
+    subscriptionPrice : Float!
+    createdAt: DateTime!
+    updatedAt: DateTime!
+}
+
+type SubscriptionEdge{
+    cursor :  String!
+    node : Subscription!
+}
+
+type SubscriptionConnection{
+    edges : [SubscriptionEdge!]
+    pageInfo : PageInfo
+    totalCount : Int
+    errors : ErrorResponse
+}
+
+input SubscriptionFilter{
+    subscriptionStatus : SubscriptionStatus!
+    subscriptionBillingCycle : BillingCycle!
+    subscriptionPrice : Float!
+    fromDate : Date
+    toDate : Date
+}
+
+enum SubscribedField{
+    CREATED_AT
+}
+
+input SubscriptionSort{
+    order : SortOrder
+    field : SubscribedField
+}
+
+input SubscriptionLookupInput{
+    id : ID
+    userId : ID
+}
+
+type SubscriptionResponse{
+    subscription : Subscription
+    error : ErrorResponse
+}
+
+type SubscriptionMilkEdge{
+    cursor : String!
+    node : Subscription!
+}
+
+type SubscriptionMilkConnection{
+    edges : [SubscriptionMilkEdge!]
+    pageInfo : PageInfo!
+    totalCount : Int!
+    error : ErrorResponse
+}
+
+input SubscriptionMilkLookupInput{
+    id : ID!
+}
+
+enum SubscribedMilkField{
+    SUBSCRIBED_QUANTITY
+    SUBSCRIBED_PRICE
+    CREATED_AT
+}
+
+input  SubscriptionMilkSort{
+    order : SortOrder!
+    field : SubscribedMilkField!
+}
+
+input SubscriptionMilkFilter{
+    subscribedMilkType : MilkType!
+    subscribedSession : Session!
+    fromDate : Date
+    toDate : Date
+}
+
+extend type Query{
+    subscriptions( first : Int
+        last : Int
+        after : String
+        before: String
+        filter : SubscriptionFilter
+        search : String
+        sort : SubscriptionSort) : SubscriptionConnection!
+    subscription(input : SubscriptionLookupInput!) : SubscriptionResponse!
+    subscriptionMilks( first : Int
+        last : Int
+        after : String
+        before: String
+        filter : SubscriptionMilkFilter
+        search : String
+        sort : SubscriptionMilkSort) : SubscriptionMilkConnection!
+    subscriptionMilk(input : SubscriptionMilkLookupInput!) : SubscriptionResponse!
+}
+
+input CreateSubscriptionMilkInput{
+    subscribedMilkType : MilkType!
+    subscribedQuantity : Float!
+    subscribedSession : Session!
+}
+
+input CreateSubscriptionInput{
+    user : ID!
+    subscriptionBillingCycle : BillingCycle!
+    subscribedMilkType : [CreateSubscriptionMilkInput!]!
+}
+
+input UpdateSubscriptionInput{
+    id : ID!
+    subscriptionBillingCycle : BillingCycle!
+    subscribedSession : Session!
+}
+
+
+type SubscribedMilkResponse{
+    subscribedMilk : SubscribedMilk
+    error : ErrorResponse
+}
+
+input UpdateSubscribedMilkInput{
+    id : ID!
+    subscribedMilkType : MilkType
+    subscribedQuantity : Float
+    subscribedSession : Session
+}
+
+input AddSubscribedMilkInput{
+    subscriptionId : ID!
+    subscribedMilkType : MilkType
+    subscribedQuantity : Float
+    subscribedSession : Session
+}
+
+
+extend type Mutation {
+    createSubscription(input : CreateSubscriptionInput!) : SubscriptionResponse!
+    updateSubscription(input: UpdateSubscriptionInput!) : SubscriptionResponse!
+    deleteSubscription(input : ID! ) : SubscriptionResponse!
+    addSubscribedMilk(input : AddSubscribedMilkInput!) : SubscriptionResponse!
+    updateSubscribedMilk(input: UpdateSubscribedMilkInput!) : SubscriptionResponse!
+    deleteSubscriptionMilk(input : ID!) : SubscriptionResponse!
+}

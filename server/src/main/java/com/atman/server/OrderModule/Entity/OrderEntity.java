@@ -1,8 +1,7 @@
 package com.atman.server.OrderModule.Entity;
 
+import com.atman.server.Admin.Entity.BaseEntity;
 import com.atman.server.OrderModule.Enum.OrderStatus;
-import com.atman.server.OrderModule.Enum.PaymentStatus;
-import com.atman.server.UserModule.Entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,21 +18,23 @@ import java.util.UUID;
 @AllArgsConstructor
 @Data
 @Entity
-@Table(name = "orders", indexes = {@Index(name = "idx_customer_id", columnList = "customer_id"), @Index(name = "idx_vendor_id", columnList = "vendor_id")})
+@Table(name = "orders", indexes = {@Index(name = "idx_order_customer_id", columnList = "delivered_to"), @Index(name = "idx_order_vendor_id", columnList = "delivered_by"), @Index(name = "idx_order_street_id", columnList = "street_id")})
 @SuperBuilder
 public class OrderEntity extends BaseEntity {
 
-    @Column(name = "customer_id")
-    private UUID customerId;
+    @Column(name = "street_id")
+    private UUID street;
 
-    @Column(name = "vendor_id")
-    private UUID vendorId;
+    @Column(name = "delivered_to")
+    private UUID deliveredTo;
 
-    private OrderStatus orderStatus;
+    @Column(name = "delivered_by")
+    private UUID deliveredBy;
 
     @Enumerated(EnumType.STRING)
-    private PaymentStatus paymentStatus;
+    @Column(name = "order_status", nullable = false)
+    private OrderStatus orderStatus;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<OrderedMilkEntity> orderedMilk = new HashSet<>();
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<OrderMilkEntity> orderedMilk = new HashSet<>();
 }
