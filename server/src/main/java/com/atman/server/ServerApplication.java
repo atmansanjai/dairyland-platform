@@ -1,14 +1,13 @@
 package com.atman.server;
 
-import com.atman.server.Admin.Configuration.JwtConfig;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cache.annotation.EnableCaching;
 
 @SpringBootApplication
 @EnableBatchProcessing
-@EnableConfigurationProperties(JwtConfig.class)
+@EnableCaching
 public class ServerApplication {
 
     public static void main(String[] args) {

@@ -20,7 +20,8 @@ import java.math.BigDecimal;
 @Entity
 @SuperBuilder
 @Table(name = "subscription_milk", indexes = @Index(name = "idx_subscripiton_customer_id", columnList = "customer_id"))
-public class SubscriptionMilk extends BaseEntity {
+public class SubscriptionEntity extends BaseEntity {
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     private CustomerEntity customer;

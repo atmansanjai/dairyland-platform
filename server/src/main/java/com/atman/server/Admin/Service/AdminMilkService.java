@@ -1,18 +1,17 @@
 package com.atman.server.Admin.Service;
 
-import com.atman.server.OrderModule.Enum.MilkType;
 import com.atman.server.Admin.Entity.AdminMilkEntity;
+import com.atman.server.OrderModule.Enum.MilkType;
+import com.atman.server.Specification.DTO.ConnectionRequestDTO;
+import com.atman.server.Specification.DTO.ConnectionResponseDTO;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.UUID;
 
 public interface AdminMilkService {
-    List<AdminMilkEntity> getAllMilk();
+    ConnectionResponseDTO<AdminMilkEntity> getAllMilk(ConnectionRequestDTO connectionRequestDTO);
 
     AdminMilkEntity getMilkById(UUID id);
-
-    AdminMilkEntity getMilkByMilkType(MilkType milkType);
 
     BigDecimal getPricePerQuantity(MilkType milkType);
 

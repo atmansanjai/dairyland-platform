@@ -4,16 +4,17 @@ import com.atman.server.Admin.Entity.BaseEntity;
 import com.atman.server.Admin.Enum.AccountStatus;
 import com.atman.server.Admin.Enum.UserRole;
 import com.atman.server.CustomerModule.Enum.BillingCycle;
+import com.atman.server.Security.Config.AuthUser;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -22,8 +23,9 @@ import java.util.UUID;
 @AllArgsConstructor
 @Data
 @Entity
+@SuperBuilder
 @Table(name = "customers", indexes = {@Index(name = "idx_customer_contact_number", columnList = "contact_number")})
-public class CustomerEntity extends BaseEntity {
+public class CustomerEntity extends BaseEntity implements AuthUser {
 
     @Column(name = "username", nullable = false, length = 50)
     private String username;
@@ -57,8 +59,8 @@ public class CustomerEntity extends BaseEntity {
     @Column(name = "next_billing_date")
     private LocalDateTime nextBillingDate;
 
-    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<SubscriptionMilk> subscribedMilks = new HashSet<>();
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<SubscriptionEntity> subscription;
 
 
     @PrePersist

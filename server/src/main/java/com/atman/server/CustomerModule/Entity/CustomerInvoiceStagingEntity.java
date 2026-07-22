@@ -19,7 +19,7 @@ import java.util.UUID;
 @Data
 @Entity
 @Table(name = "customer_invoice_staging", indexes = {@Index(name = "idx_customer_staging_customer_id", columnList = "customer_id")})
-public class CustomerInvoiceStaging  extends BaseEntity {
+public class CustomerInvoiceStagingEntity extends BaseEntity {
     @Column(name = "customer_id")
     private UUID customerId;
     @Column(name = "invoice_id")

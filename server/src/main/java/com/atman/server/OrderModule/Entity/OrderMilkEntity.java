@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
@@ -20,6 +21,8 @@ import java.math.BigDecimal;
 @Table(name = "order_milk", indexes = @Index(name = "idx_order_id", columnList = ("order_id")))
 @SuperBuilder
 public class OrderMilkEntity extends BaseEntity {
+
+
     @Enumerated(EnumType.STRING)
     @Column(name = "order_milk_type", nullable = false)
     private MilkType orderMilkType;
@@ -35,6 +38,6 @@ public class OrderMilkEntity extends BaseEntity {
     private DeliverySession orderSession;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "order_id", nullable = false)
     private OrderEntity order;
 }

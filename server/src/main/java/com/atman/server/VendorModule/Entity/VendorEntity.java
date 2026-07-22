@@ -4,6 +4,7 @@ import com.atman.server.Admin.Entity.BaseEntity;
 import com.atman.server.Admin.Enum.AccountStatus;
 import com.atman.server.Admin.Enum.UserRole;
 import com.atman.server.CustomerModule.Enum.BillingCycle;
+import com.atman.server.Security.Config.AuthUser;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,7 +22,7 @@ import java.time.LocalDateTime;
 @Entity
 @SuperBuilder
 @Table(name = "vendor", indexes = {@Index(name = "idx_vendor_contact_number", columnList = "contact_number")})
-public class VendorEntity extends BaseEntity {
+public class VendorEntity extends BaseEntity implements AuthUser {
 
     @Column(name = "username", nullable = false, length = 50)
     private String username;
@@ -31,7 +32,6 @@ public class VendorEntity extends BaseEntity {
 
     @Column(name = "password", nullable = false, length = 100)
     private String password;
-
 
     @Enumerated(EnumType.STRING)
     @Column(name = "user_role", nullable = false)

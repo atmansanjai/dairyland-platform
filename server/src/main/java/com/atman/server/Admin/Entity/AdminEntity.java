@@ -3,6 +3,7 @@ package com.atman.server.Admin.Entity;
 
 import com.atman.server.Admin.Enum.AccountStatus;
 import com.atman.server.Admin.Enum.UserRole;
+import com.atman.server.Security.Config.AuthUser;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,7 +19,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @Entity
 @Table(name = "admins", indexes = @Index(name = "idx_admin_contact_number", columnList = ("contact_number")))
-public class AdminEntity extends BaseEntity {
+public class AdminEntity extends BaseEntity implements AuthUser {
     @Column(name = "username", nullable = false, length = 50)
     private String username;
 
@@ -35,4 +36,5 @@ public class AdminEntity extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "account_status", nullable = false)
     private AccountStatus accountStatus;
+
 }

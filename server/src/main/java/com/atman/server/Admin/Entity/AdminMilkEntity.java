@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
 
@@ -17,9 +18,10 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Data
 @Entity
-@Table(name = "admin_milk" , indexes = @Index(name = "idx_milk_type", columnList = "milk_type"))
+@SuperBuilder
+@Table(name = "admin_milk", indexes = @Index(name = "idx_milk_type", columnList = "milk_type"))
 public class AdminMilkEntity extends BaseEntity {
-    @Column(name = "milk_type", nullable = false)
+    @Column(name = "milk_type", nullable = false,unique = true)
     private MilkType milkType;
     @Column(name = "price_per_quantity", nullable = false)
     private BigDecimal pricePerQuantity;
