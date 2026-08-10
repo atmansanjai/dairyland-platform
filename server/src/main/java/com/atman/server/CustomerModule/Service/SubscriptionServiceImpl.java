@@ -5,7 +5,6 @@ import com.atman.server.CustomerModule.Entity.CustomerEntity;
 import com.atman.server.CustomerModule.Entity.SubscriptionEntity;
 import com.atman.server.CustomerModule.Repository.SubscriptionRepository;
 import com.atman.server.CustomerModule.Service.Impl.SubscriptionService;
-import com.atman.server.OrderModule.Enum.DeliverySession;
 import com.atman.server.Specification.ConnectionResponseBuilder;
 import com.atman.server.Specification.DTO.ConnectionRequestDTO;
 import com.atman.server.Specification.DTO.ConnectionResponseDTO;
@@ -14,9 +13,6 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -28,7 +24,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     private final ConnectionResponseBuilder connectionResponseBuilder;
 
     @Override
-    public SubscriptionEntity createSubscription(SubscriptionDTO subscriptionDTO) {
+    public SubscriptionEntity saveSubscription(SubscriptionDTO subscriptionDTO) {
         SubscriptionEntity subscriptionEntity = SubscriptionEntity.builder()
                                                                   .customer(CustomerEntity.builder()
                                                                                           .id(subscriptionDTO.getCustomerId())
@@ -38,14 +34,6 @@ public class SubscriptionServiceImpl implements SubscriptionService {
                                                                   .milkQuantity(subscriptionDTO.getQuantity())
                                                                   .build();
         return subscriptionRepository.save(subscriptionEntity);
-    }
-
-    @Override
-    public SubscriptionEntity updateSubscription(UUID subscriptionId, BigDecimal quantity, DeliverySession session) {
-        SubscriptionEntity subscriptionById = getSubscriptionById(subscriptionId);
-        subscriptionById.setMilkQuantity(quantity);
-        subscriptionById.setDeliverySession(session);
-        return subscriptionRepository.save(subscriptionById);
     }
 
     @Override
@@ -61,9 +49,17 @@ public class SubscriptionServiceImpl implements SubscriptionService {
                                      .orElseThrow(() -> new EntityNotFoundException("subscription not found" + subscriptionId));
     }
 
-
     @Override
     public ConnectionResponseDTO<SubscriptionEntity> getAllSubscriptions(ConnectionRequestDTO connectionRequestDTO) {
         return connectionResponseBuilder.build(subscriptionRepository, specificationBuilder, connectionRequestDTO);
+    }
+
+    @Override
+    public SubscriptionEntity updateSubscription(UUID subscriptionId, SubscriptionDTO subscriptionDTO) {
+        SubscriptionEntity subscriptionById = getSubscriptionById(subscriptionId);
+        subscriptionById.setMilkQuantity(subscriptionDTO.getQuantity());
+        subscriptionById.setDeliverySession(subscriptionDTO.getDeliverySession());
+        subscriptionById.setMilkType(subscriptionDTO.getMilkType());
+        return subscriptionRepository.save(subscriptionById);
     }
 }

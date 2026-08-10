@@ -1,5 +1,6 @@
 package com.atman.server.Admin.Service;
 
+import com.atman.server.Admin.DTO.AdminMilkCreationDTO;
 import com.atman.server.Admin.Entity.AdminMilkEntity;
 import com.atman.server.Admin.Repository.AdminMilkRepository;
 import com.atman.server.OrderModule.Enum.MilkType;
@@ -44,19 +45,10 @@ public class AdminMilkServiceImpl implements AdminMilkService {
     }
 
     @Override
-    public AdminMilkEntity addMilk(AdminMilkEntity milk) {
-        AdminMilkEntity build = AdminMilkEntity.builder()
-                                               .milkType(milk.getMilkType())
-                                               .pricePerQuantity(milk.getPricePerQuantity())
-                                               .build();
-        return adminMilkRepository.save(build);
-    }
-
-    @Override
-    public AdminMilkEntity updateMilk(UUID id, AdminMilkEntity milk) {
+    public AdminMilkEntity updateMilk(UUID id, AdminMilkCreationDTO adminMilkCreationDTO) {
         AdminMilkEntity milkById = getMilkById(id);
-        milkById.setMilkType(milk.getMilkType());
-        milkById.setPricePerQuantity(milk.getPricePerQuantity());
+        milkById.setMilkType(adminMilkCreationDTO.getMilkType());
+        milkById.setPricePerQuantity(adminMilkCreationDTO.getPricePerQuantity());
         return adminMilkRepository.save(milkById);
     }
 
@@ -65,5 +57,14 @@ public class AdminMilkServiceImpl implements AdminMilkService {
         AdminMilkEntity milkById = getMilkById(id);
         adminMilkRepository.delete(milkById);
         return milkById;
+    }
+
+    @Override
+    public AdminMilkEntity saveAdminMilk(AdminMilkCreationDTO adminMilkCreationDTO) {
+        AdminMilkEntity build = AdminMilkEntity.builder()
+                                               .milkType(adminMilkCreationDTO.getMilkType())
+                                               .pricePerQuantity(adminMilkCreationDTO.getPricePerQuantity())
+                                               .build();
+        return adminMilkRepository.save(build);
     }
 }

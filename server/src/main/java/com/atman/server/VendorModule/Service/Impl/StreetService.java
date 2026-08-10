@@ -5,12 +5,12 @@ import com.atman.server.Specification.DTO.ConnectionRequestDTO;
 import com.atman.server.Specification.DTO.ConnectionResponseDTO;
 import com.atman.server.VendorModule.Entity.StreetEntity;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 public interface StreetService {
 
-    StreetEntity createStreet(String StreetName);
+    StreetEntity saveStreet(String StreetName);
 
     StreetEntity getStreetById(UUID id);
 
@@ -20,6 +20,6 @@ public interface StreetService {
 
     ConnectionResponseDTO<StreetEntity> getAllStreets(ConnectionRequestDTO connectionRequestDTO);
 
-    void assignVendorForStreets(UUID vendorId, Collection<UUID> streets);
+    Boolean assignVendorForStreets(UUID vendorId, List<UUID> streets);
 
 }

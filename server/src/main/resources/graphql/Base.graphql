@@ -1,5 +1,6 @@
 scalar DateTime
 scalar Date
+scalar BigDecimal
 
 interface Node {
     id: ID!
@@ -7,10 +8,11 @@ interface Node {
     updatedAt: DateTime!
 }
 
-enum SortOrder{
-    ASC
-    DESC
+input Map{
+    key : String
+    value : String
 }
+
 
 type PageInfo{
     hasNextPage: Boolean!
@@ -28,6 +30,40 @@ type ErrorResponse{
     status : Int!
     message : String!
     errorStack : ErrorStack
+}
+
+enum MilkType{
+    COW,BUFFALO
+}
+
+enum UserRole{
+    ADMIN,CUSTOMER,VENDOR
+}
+
+enum BillingCycle{
+    DAILY,
+    WEEKLY,
+    MONTHLY,
+}
+
+enum PaymentStatus{
+    PENDING,
+    HALF_PAID
+    PAID
+}
+
+enum OrderStatus{
+    PENDING,SHIPPED,DELIVERED,CANCELED
+}
+
+enum AccountStatus{
+    ACTIVE,INACTIVE,SUSPEND
+}
+
+enum DeliverySession{
+    MORNING,
+    EVENING,
+    BOTH
 }
 
 type Query{}

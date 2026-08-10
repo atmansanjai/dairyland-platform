@@ -1,0 +1,68 @@
+type Admin implements Node{
+    id: ID!
+    username : String!
+    contactNumber : String!
+    userRole : UserRole!
+    accountStatus : AccountStatus!
+    createdAt: DateTime!
+    updatedAt: DateTime!
+}
+
+type AdminMilk implements Node{
+    id: ID!
+    milkType : MilkType!
+    pricePerQuantity: BigDecimal!
+    createdAt: DateTime!
+    updatedAt: DateTime!
+}
+
+input AdminRequest{
+    username : String!
+    password : String!
+    contactNumber : String!
+    userRole : UserRole!
+}
+
+input AdminMilkRequest{
+    milkType : MilkType!
+    pricePerQuantity : BigDecimal!
+}
+
+type AdminEdge{
+    node : Admin!
+    cursor : String!
+}
+
+type AdminMilkEdge{
+    node : AdminMilk!
+    cursor : String!
+}
+
+type AdminConnectionResponse{
+    edges : [AdminEdge!]!
+    pageInfo : PageInfo!
+    totalCount :   BigDecimal!
+}
+
+type AdminMilkConnectionResponse{
+    edges : [AdminMilkEdge!]!
+    pageInfo : PageInfo!
+    totalCount :   BigDecimal!
+}
+
+extend type Query {
+    admins(first : Int, after : String,last : Int , before : String , search : Map , filter : [Map] sort : [Map] ):AdminConnectionResponse!
+    adminMilks(first : Int, after : String,last : Int , before : String , search : Map , filter : [Map] sort : [Map] ):AdminMilkConnectionResponse!
+    adminById(id : ID!) : Admin!
+    adminMilkByID(id : ID!):AdminMilk!
+}
+
+extend type Mutation {
+    saveAdmin(admin : AdminRequest!): Admin!
+    saveAdminMilk(adminMilk : AdminMilkRequest!):AdminMilk!
+    updateAdmin(id : ID! , admin : AdminRequest!): Admin!
+    updateAdminAccountStatus(id:ID! , status : AccountStatus!): Admin!
+    updateAdminMilk (id: ID! , adminMilk : AdminMilkRequest!): AdminMilk!
+    deleteAdmin(id:ID!): ID!
+    deleteAdminMilk(id:ID!):ID!
+}

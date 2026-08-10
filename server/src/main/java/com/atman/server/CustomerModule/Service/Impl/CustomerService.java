@@ -25,4 +25,6 @@ public interface CustomerService {
     CustomerEntity deleteCustomerById(UUID customerId);
 
     CustomerEntity updateAccountStatus(UUID customerId, AccountStatus accountStatus);
+
+    CustomerEntity updateCustomer(UUID id, CustomerCreationDTO customerCreationDTO);
 }

@@ -13,7 +13,6 @@ import com.atman.server.VendorModule.Service.Impl.VendorService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -29,12 +28,14 @@ public class VendorServiceImpl implements VendorService {
     private final SpecificationBuilder<VendorEntity> specificationBuilder;
 
     @Override
-    public VendorEntity createVendor(VendorCreationDTO vendorCreationDTO) {
+    public VendorEntity saveVendor(VendorCreationDTO vendorCreationDTO) {
         VendorEntity vendorEntity = VendorEntity.builder()
                                                 .userRole(UserRole.VENDOR)
                                                 .contactNumber(vendorCreationDTO.getContactNumber())
                                                 .username(vendorCreationDTO.getUsername())
                                                 .commissionPercentage(vendorCreationDTO.getCommissionPercentage())
+                                                .billingCycle(vendorCreationDTO.getBillingCycle())
+                                                .lastBilledDate(LocalDateTime.now())
                                                 .accountStatus(AccountStatus.ACTIVE)
                                                 .build();
         return vendorRepository.save(vendorEntity);
@@ -56,6 +57,16 @@ public class VendorServiceImpl implements VendorService {
     public VendorEntity getVendorById(UUID vendorId) {
         return vendorRepository.findById(vendorId)
                                .orElseThrow(() -> new EntityNotFoundException("Vendor not found" + vendorId));
+    }
+
+    @Override
+    public VendorEntity updateVendor(UUID vendorId, VendorCreationDTO vendorCreationDTO) {
+        VendorEntity vendorById = getVendorById(vendorId);
+        vendorById.setContactNumber(vendorCreationDTO.getContactNumber());
+        vendorById.setUsername(vendorCreationDTO.getUsername());
+        vendorById.setCommissionPercentage(vendorCreationDTO.getCommissionPercentage());
+        vendorById.setBillingCycle(vendorCreationDTO.getBillingCycle());
+        return vendorRepository.save(vendorById);
     }
 
     @Override

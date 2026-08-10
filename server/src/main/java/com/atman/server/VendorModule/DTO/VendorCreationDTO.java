@@ -1,5 +1,6 @@
 package com.atman.server.VendorModule.DTO;
 
+import com.atman.server.CustomerModule.Enum.BillingCycle;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,4 +17,5 @@ public class VendorCreationDTO {
     private String password;
     private String contactNumber;
     private BigDecimal commissionPercentage;
+    private BillingCycle billingCycle;
 }

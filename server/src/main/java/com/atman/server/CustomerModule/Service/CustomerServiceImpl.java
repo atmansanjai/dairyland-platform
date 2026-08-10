@@ -13,6 +13,7 @@ import com.atman.server.Specification.SpecificationBuilder;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -26,6 +27,7 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
     private final SpecificationBuilder<CustomerEntity> specificationBuilder;
     private final ConnectionResponseBuilder connectionResponseBuilder;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public CustomerEntity createCustomer(CustomerCreationDTO customerCreationDTO) {
@@ -33,6 +35,9 @@ public class CustomerServiceImpl implements CustomerService {
                                                 .contactNumber(customerCreationDTO.getContactNumber())
                                                 .accountStatus(AccountStatus.ACTIVE)
                                                 .username(customerCreationDTO.getUsername())
+                                                .password(passwordEncoder.encode(customerCreationDTO.getPassword()))
+                                                .billingCycle(customerCreationDTO.getBillingCycle())
+                                                .lastBilledDate(LocalDateTime.now())
                                                 .userRole(UserRole.CUSTOMER)
                                                 .build();
         return customerRepository.save(customer);
@@ -73,6 +78,16 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerEntity updateAccountStatus(UUID customerId, AccountStatus accountStatus) {
         CustomerEntity customerById = getCustomerById(customerId);
         customerById.setAccountStatus(accountStatus);
+        return customerRepository.save(customerById);
+    }
+
+    @Override
+    public CustomerEntity updateCustomer(UUID id, CustomerCreationDTO customerCreationDTO) {
+        CustomerEntity customerById = getCustomerById(id);
+        customerById.setContactNumber(customerCreationDTO.getContactNumber());
+        customerById.setUsername(customerCreationDTO.getUsername());
+        customerById.setBillingCycle(customerCreationDTO.getBillingCycle());
+        customerById.setPassword(passwordEncoder.encode(customerCreationDTO.getPassword()));
         return customerRepository.save(customerById);
     }
 }

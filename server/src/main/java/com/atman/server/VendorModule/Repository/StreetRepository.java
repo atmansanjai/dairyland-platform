@@ -9,18 +9,29 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface StreetRepository extends JpaRepository<StreetEntity, UUID> , JpaSpecificationExecutor<StreetEntity> {
+public interface StreetRepository extends JpaRepository<StreetEntity, UUID>, JpaSpecificationExecutor<StreetEntity> {
 
     Collection<StreetEntity> findAllByStreetNameContainingIgnoreCase(String streetName);
 
     @Modifying
     @Query(value = """
-        UPDATE streets 
-        SET vendor_id = :vendorId 
-        WHERE id IN (:streets)
-        """, nativeQuery = true)
-    void assignVendorToStreets(@Param("vendorId") UUID vendorId, @Param("streets") Collection<UUID> streets);
+            WITH update_street AS (
+                UPDATE street 
+                SET vendor_id = :vendorId 
+                WHERE id IN (:streetIds)
+                RETURNING id
+            ),
+            update_orders AS (
+                UPDATE orders 
+                SET delivered_to = :vendorId 
+                FROM update_street
+                WHERE orders.street_id = update_street.id
+            )
+            SELECT 1;
+            """, nativeQuery = true)
+    void assignVendorToStreet(@Param("vendorId") UUID vendorId, @Param("streetIds") List<UUID> streetIds);
 }

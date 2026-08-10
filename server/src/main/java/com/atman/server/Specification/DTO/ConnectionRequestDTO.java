@@ -5,18 +5,20 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
 public class ConnectionRequestDTO {
-    private int first;
+    private Integer first;
     private String after;
-    private int last;
+    private Integer last;
     private String before;
     private MapDTO search;
-    private MapDTO filter;
-    private MapDTO sort;
+    private List<MapDTO> filter;
+    private List<MapDTO> sort;
 }
 
 

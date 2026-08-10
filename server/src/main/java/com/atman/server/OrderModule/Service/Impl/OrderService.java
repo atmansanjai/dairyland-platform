@@ -1,9 +1,11 @@
 package com.atman.server.OrderModule.Service.Impl;
 
+import com.atman.server.OrderModule.DTO.OrderRequestDTO;
 import com.atman.server.OrderModule.Entity.OrderEntity;
 import com.atman.server.OrderModule.Enum.OrderStatus;
 import com.atman.server.Specification.DTO.ConnectionRequestDTO;
 import com.atman.server.Specification.DTO.ConnectionResponseDTO;
+import org.springframework.batch.infrastructure.item.database.Order;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -15,6 +17,8 @@ public interface OrderService {
     OrderEntity generateOrder(UUID customerId);
 
     OrderEntity deleteOrder(UUID orderId);
+
+    OrderEntity updateOrder(UUID orderId, OrderRequestDTO orderRequestDTO);
 
     OrderEntity updateOrderStatus(UUID orderId, OrderStatus orderStatus);
 

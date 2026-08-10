@@ -8,7 +8,7 @@ import com.atman.server.Specification.DTO.ConnectionResponseDTO;
 import java.util.UUID;
 
 public interface AdminService {
-    AdminEntity createAdmin(AdminCreationDTO adminCreationDTO);
+    AdminEntity saveAdmin(AdminCreationDTO adminCreationDTO);
 
     AdminEntity getAdminByContactNumber(String contactNumber);
 

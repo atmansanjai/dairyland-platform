@@ -1,0 +1,76 @@
+type Vendor implements Node{
+    id: ID!
+    username : String!
+    contactNumber : String!
+    userRole : UserRole!
+    accountStatus : AccountStatus!
+    commissionPercentage : BigDecimal!
+    street : [Street!]!
+    billingCycle : BillingCycle!
+    lastBilledDate: DateTime!
+    nextBilledDate : DateTime!
+    createdAt: DateTime!
+    updatedAt: DateTime!
+}
+
+type Street implements Node{
+    id: ID!
+    streetName : String!
+    vendor : Vendor!
+    createdAt: DateTime!
+    updatedAt: DateTime!
+}
+
+
+input VendorRequest{
+    username : String!
+    contactNumber : String!
+    userRole : UserRole!
+    billingCycle : BillingCycle!
+}
+
+
+type VendorEdge{
+    node :Vendor!
+    cursor : String!
+}
+
+type StreetEdge{
+    node : Street!
+    cursor : String!
+}
+
+type VendorConnectionResponse{
+    edges : [VendorEdge!]!
+    pageInfo : PageInfo!
+    totalCount :   BigDecimal!
+}
+
+type StreetConnectionResponse{
+    edges : [StreetEdge!]!
+    pageInfo : PageInfo!
+    totalCount :   BigDecimal!
+}
+
+
+extend type Query {
+    vendors(first : Int, after : String,last : Int! , before : String , search : Map , filter : [Map] sort : [Map] ):VendorConnectionResponse!
+    streets(first : Int, after : String,last : Int! , before : String , search : Map , filter : [Map] sort : [Map] ):StreetConnectionResponse!
+    vendorByID(input : ID!) :Vendor!
+    streetByID(input : ID!):Street!
+}
+
+extend type Mutation {
+    saveVendor(vendor : VendorRequest!): Vendor!
+    saveStreet(streetName : String!):Street!
+    assignVendorForStreet( vendorId : ID! ,streets : [ID!]!)  : Boolean
+    updateVendor(id : ID! , vendor : VendorRequest!): Vendor!
+    updateVendorAccountStatus (id:ID!,accountStatus : AccountStatus!) : Vendor!
+    updateStreet (id: ID! , streetName : String!): Street!
+    deleteVendor(id:ID!): ID!
+    deleteStreet(id:ID!):ID!
+}
+
+
+
+

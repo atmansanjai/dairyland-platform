@@ -4,7 +4,7 @@ import com.atman.server.OrderModule.Entity.InvoiceEntity;
 import com.atman.server.Specification.DTO.ConnectionRequestDTO;
 import com.atman.server.Specification.DTO.ConnectionResponseDTO;
 
-import java.util.Collection;
+import java.math.BigDecimal;
 import java.util.UUID;
 
 public interface InvoiceService {
@@ -14,6 +14,8 @@ public interface InvoiceService {
     InvoiceEntity generateInvoiceForVendor(UUID vendorId);
 
     InvoiceEntity deleteInvoice(UUID invoiceId);
+
+    InvoiceEntity updateInvoicePayment(UUID invoiceId, BigDecimal amountPaid);
 
     InvoiceEntity getInvoiceById(UUID invoiceId);
 

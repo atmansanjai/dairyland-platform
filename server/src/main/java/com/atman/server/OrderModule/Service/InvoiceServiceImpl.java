@@ -78,6 +78,33 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
+    public InvoiceEntity updateInvoicePayment(UUID invoiceId, BigDecimal amountPaid) {
+        InvoiceEntity invoiceById = getInvoiceById(invoiceId);
+        invoiceById.setAmountPaid(invoiceById.getAmountPaid()
+                                             .add(amountPaid));
+        PaymentStatus newStatus = calculatePaymentStatus(invoiceById.getAmountPaid(), invoiceById.getAmountToPay());
+        invoiceById.setPaymentStatus(newStatus);
+        return invoiceRepository.save(invoiceById);
+    }
+
+    public PaymentStatus calculatePaymentStatus(BigDecimal amountPaid, BigDecimal amountToPay) {
+        int comparison = amountPaid.compareTo(amountToPay);
+
+        switch(comparison) {
+            case -1 -> {
+                return amountPaid.compareTo(BigDecimal.ZERO) == 0 ? PaymentStatus.PENDING : PaymentStatus.PARTIAL;
+            }
+            case 0 -> {
+                return PaymentStatus.SUCCESS;
+            }
+            case 1 -> {
+                return PaymentStatus.OVERPAID;
+            }
+            default -> throw new IllegalStateException("Unexpected comparison result: " + comparison);
+        }
+    }
+
+    @Override
     public InvoiceEntity getInvoiceById(UUID invoiceId) {
         return invoiceRepository.findById(invoiceId)
                                 .orElseThrow(() -> new EntityNotFoundException("invoice not found" + invoiceId));

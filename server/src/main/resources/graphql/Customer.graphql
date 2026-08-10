@@ -1,0 +1,79 @@
+type Customer implements Node{
+    id: ID!
+    username : String!
+    contactNumber : String!
+    userRole : UserRole!
+    accountStatus : AccountStatus!
+    subscriptions : [Subscription!]!
+    billingCycle : BillingCycle!
+    lastBilledDate: DateTime!
+    nextBilledDate : DateTime!
+    createdAt: DateTime!
+    updatedAt: DateTime!
+}
+
+type Subscription implements Node{
+    id: ID!
+    milkType : MilkType!
+    deliverySession: DeliverySession!
+    quantity : BigDecimal!
+    createdAt: DateTime!
+    updatedAt: DateTime!
+}
+
+
+input CustomerRequest{
+    username : String!
+    contactNumber : String!
+    password: String!
+    userRole : UserRole!
+    accountStatus : AccountStatus!
+    billingCycle : BillingCycle!
+}
+
+input SubscriptionRequest{
+    customer : ID!
+    milkType : MilkType!
+    deliverySession: DeliverySession!
+    quantity : BigDecimal!
+}
+
+type CustomerEdge{
+    node :Customer!
+    cursor : String!
+}
+
+type SubscriptionEdge{
+    node : Subscription!
+    cursor : String!
+}
+
+type CustomerConnectionResponse{
+    edges : [CustomerEdge!]!
+    pageInfo : PageInfo!
+    totalCount :   BigDecimal!
+}
+
+type SubscriptionConnectionResponse{
+    edges : [SubscriptionEdge!]!
+    pageInfo : PageInfo!
+    totalCount :   BigDecimal!
+}
+
+extend type Query {
+    customers(first : Int, after : String,last : Int , before : String , search : Map , filter : [Map] sort : [Map] ):CustomerConnectionResponse!
+    subscriptions(first : Int, after : String,last : Int, before : String , search : Map , filter : [Map] sort : [Map] ):SubscriptionConnectionResponse!
+    customerByID(id : ID!) :Customer!
+    customerByContactNumber(contactNumber : String!) : Customer!
+    subscriptionByID(id : ID!):Subscription!
+}
+
+extend type Mutation {
+    saveCustomer(customer : CustomerRequest!): Customer!
+    saveSubscription(subscription : SubscriptionRequest!):Subscription!
+    updateCustomer(id : ID! , customer : CustomerRequest!): Customer!
+    updateCustomerAccountStatus(id:ID!,status: AccountStatus!):Customer!
+    updateSubscription (id: ID! , subscription : SubscriptionRequest!): Subscription!
+    deleteCustomer(id:ID!): ID!
+    deleteSubscription(id:ID!):ID!
+}

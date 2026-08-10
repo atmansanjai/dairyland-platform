@@ -3,6 +3,7 @@ package com.atman.server.Admin.Service;
 import com.atman.server.Admin.DTO.AdminCreationDTO;
 import com.atman.server.Admin.Entity.AdminEntity;
 import com.atman.server.Admin.Enum.AccountStatus;
+import com.atman.server.Admin.Enum.UserRole;
 import com.atman.server.Admin.Repository.AdminRepository;
 import com.atman.server.Security.Config.JwtService;
 import com.atman.server.Specification.ConnectionResponseBuilder;
@@ -10,7 +11,6 @@ import com.atman.server.Specification.DTO.ConnectionRequestDTO;
 import com.atman.server.Specification.DTO.ConnectionResponseDTO;
 import com.atman.server.Specification.SpecificationBuilder;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,15 +25,14 @@ public class AdminServiceImpl implements AdminService {
     private final ConnectionResponseBuilder connectionResponseBuilder;
     private final SpecificationBuilder<AdminEntity> specificationBuilder;
     private final PasswordEncoder passwordEncoder;
-    private final JwtService jwtService;
 
-    @PreAuthorize("hasRole('ADMIN')")
     @Override
-    public AdminEntity createAdmin(AdminCreationDTO adminCreationDTO) {
+    public AdminEntity saveAdmin(AdminCreationDTO adminCreationDTO) {
         AdminEntity adminEntity = AdminEntity.builder()
                                              .username(adminCreationDTO.getUsername())
                                              .password(passwordEncoder.encode(adminCreationDTO.getPassword()))
                                              .contactNumber(adminCreationDTO.getContactNumber())
+                                             .userRole(UserRole.ADMIN)
                                              .accountStatus(AccountStatus.INACTIVE)
                                              .build();
         return adminRepository.save(adminEntity);
@@ -45,7 +44,6 @@ public class AdminServiceImpl implements AdminService {
                               .orElseThrow(() -> new RuntimeException("Admin not found"));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @Override
     public AdminEntity updateAdmin(UUID id, AdminCreationDTO adminCreationDTO) {
         AdminEntity adminById = getAdminById(id);
@@ -61,7 +59,6 @@ public class AdminServiceImpl implements AdminService {
                               .orElseThrow(() -> new RuntimeException("Admin not found"));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @Override
     public AdminEntity deleteAdminById(UUID id) {
         AdminEntity adminById = getAdminById(id);
@@ -69,7 +66,6 @@ public class AdminServiceImpl implements AdminService {
         return adminById;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @Override
     public ConnectionResponseDTO<AdminEntity> getAllAdmins(ConnectionRequestDTO connectionRequestDTO) {
         return connectionResponseBuilder.build(adminRepository, specificationBuilder, connectionRequestDTO);

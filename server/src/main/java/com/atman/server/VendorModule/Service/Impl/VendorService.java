@@ -11,13 +11,15 @@ import java.util.UUID;
 
 public interface VendorService {
 
-    VendorEntity createVendor(VendorCreationDTO vendorCreationDTO);
+    VendorEntity saveVendor(VendorCreationDTO vendorCreationDTO);
 
     void updateBillingDetails(UUID vendorId, LocalDateTime currentBilled);
 
     ConnectionResponseDTO<VendorEntity> getAllVendors(ConnectionRequestDTO connectionRequestDTO);
 
     VendorEntity getVendorById(UUID vendorId);
+
+    VendorEntity updateVendor(UUID vendorId, VendorCreationDTO vendorCreationDTO);
 
     VendorEntity getVendorByContactNumber(String contactNumber);
 

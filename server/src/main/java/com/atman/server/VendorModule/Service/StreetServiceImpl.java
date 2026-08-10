@@ -12,7 +12,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -25,7 +25,7 @@ public class StreetServiceImpl implements StreetService {
     private final ConnectionResponseBuilder connectionResponseBuilder;
 
     @Override
-    public StreetEntity createStreet(String StreetName) {
+    public StreetEntity saveStreet(String StreetName) {
         StreetEntity streetEntity = new StreetEntity();
         streetEntity.setStreetName(StreetName);
         return streetRepository.save(streetEntity);
@@ -57,7 +57,8 @@ public class StreetServiceImpl implements StreetService {
     }
 
     @Override
-    public void assignVendorForStreets(UUID vendorId, Collection<UUID> streets) {
-
+    public Boolean assignVendorForStreets(UUID vendorId, List<UUID> streets) {
+        streetRepository.assignVendorToStreet(vendorId, streets);
+        return true;
     }
 }

@@ -6,6 +6,7 @@ import com.atman.server.Admin.Service.AdminMilkService;
 import com.atman.server.CustomerModule.Entity.CustomerEntity;
 import com.atman.server.CustomerModule.Service.Impl.CustomerService;
 import com.atman.server.CustomerModule.Service.Impl.SubscriptionService;
+import com.atman.server.OrderModule.DTO.OrderRequestDTO;
 import com.atman.server.OrderModule.Entity.OrderEntity;
 import com.atman.server.OrderModule.Entity.OrderMilkEntity;
 import com.atman.server.OrderModule.Enum.OrderStatus;
@@ -36,8 +37,6 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final CustomerService customerService;
-    private final OrderMilkService orderMilkService;
-    private final SubscriptionService subscriptionService;
     private final AdminMilkService adminMilkService;
     private SpecificationBuilder<OrderEntity> specificationBuilder;
     private ConnectionResponseBuilder connectionResponseBuilder;
@@ -74,6 +73,14 @@ public class OrderServiceImpl implements OrderService {
         OrderEntity orderEntity = getOrderById(orderId);
         orderRepository.delete(orderEntity);
         return orderEntity;
+    }
+
+    @Override
+    public OrderEntity updateOrder(UUID orderId, OrderRequestDTO orderRequestDTO) {
+        OrderEntity orderById = getOrderById(orderId);
+        orderById.setDeliveredTo(orderRequestDTO.getDeliveredTo());
+        orderById.setDeliveredBy(orderRequestDTO.getDeliveredBy());
+        return orderRepository.save(orderById);
     }
 
     @Override

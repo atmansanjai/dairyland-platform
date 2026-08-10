@@ -1,5 +1,6 @@
 package com.atman.server.Admin.Service;
 
+import com.atman.server.Admin.DTO.AdminMilkCreationDTO;
 import com.atman.server.Admin.Entity.AdminMilkEntity;
 import com.atman.server.OrderModule.Enum.MilkType;
 import com.atman.server.Specification.DTO.ConnectionRequestDTO;
@@ -15,9 +16,9 @@ public interface AdminMilkService {
 
     BigDecimal getPricePerQuantity(MilkType milkType);
 
-    AdminMilkEntity addMilk(AdminMilkEntity milk);
+    AdminMilkEntity saveAdminMilk(AdminMilkCreationDTO adminMilkCreationDTO);
 
-    AdminMilkEntity updateMilk(UUID id, AdminMilkEntity milk);
+    AdminMilkEntity updateMilk(UUID id, AdminMilkCreationDTO adminMilkCreationDTO);
 
     AdminMilkEntity deleteMilk(UUID id);
 }
