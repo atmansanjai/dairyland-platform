@@ -19,8 +19,14 @@ import React from 'react'
 import { DynamicIcon } from 'lucide-react/dynamic'
 import { contentMenus, footerMenus, sidebarMenus } from './Utils/SidebarMenus'
 
-function GroupSidebarMenuItem({ menu }: { menu: sidebarMenus }) {
-  const icon = menu.icon && 'menu'
+function GroupSidebarMenuItem({ menu, enableIcon }: { menu: sidebarMenus; enableIcon: boolean }) {
+  const icon = menu.icon ?? 'menu'
+  const Icon = (
+    <SidebarMenuAction>
+      <DynamicIcon name={icon} />
+    </SidebarMenuAction>
+  )
+
   return (
     <SidebarMenuItem>
       <Link href={menu.href}>
@@ -28,16 +34,22 @@ function GroupSidebarMenuItem({ menu }: { menu: sidebarMenus }) {
           variant={'outline'}
           className={'relative'}>
           {menu.label}
-          <SidebarMenuAction>
-            <DynamicIcon name={icon} />
-          </SidebarMenuAction>
         </SidebarMenuButton>
+        {enableIcon && Icon}
       </Link>
     </SidebarMenuItem>
   )
 }
 
-function GroupSidebar({ groupHeader, groupMenus }: { groupHeader: string; groupMenus: sidebarMenus[] }) {
+function GroupSidebar({
+  groupHeader,
+  groupMenus,
+  enableIcon = false
+}: {
+  groupHeader: string
+  groupMenus: sidebarMenus[]
+  enableIcon?: boolean
+}) {
   return (
     <SidebarGroup>
       <SidebarGroupLabel>{groupHeader}</SidebarGroupLabel>
@@ -47,6 +59,7 @@ function GroupSidebar({ groupHeader, groupMenus }: { groupHeader: string; groupM
             <GroupSidebarMenuItem
               key={index}
               menu={menu}
+              enableIcon={enableIcon}
             />
           ))}
         </SidebarMenu>
@@ -72,6 +85,7 @@ export default function SidebarWidget() {
           <GroupSidebar
             groupHeader={'Settings'}
             groupMenus={footerMenus}
+            enableIcon={true}
           />
         </SidebarFooter>
       </Sidebar>

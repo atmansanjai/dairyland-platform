@@ -1,7 +1,10 @@
+import type { IconName } from 'lucide-react/dynamic'
+
+
 export interface sidebarMenus {
   label: string
   href: string
-  icon?: string
+  icon?: IconName
 }
 
 export const contentMenus: sidebarMenus[] = [

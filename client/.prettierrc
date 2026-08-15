@@ -12,8 +12,6 @@
   "singleAttributePerLine": true,
   "bracketSameLine": true,
   "jsxSingleQuote": true,
-  "jsxBracketSameLine": true,
-  "jsxSingleAttributePerLine": true,
   "rangeStart": 0,
   "plugins": ["prettier-plugin-tailwindcss"]
 }
