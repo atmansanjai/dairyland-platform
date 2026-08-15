@@ -1,7 +1,3 @@
-
-
 export default function Invoice() {
-  return (
-    <section>Invoice</section>
-  )
+  return <section>Invoice</section>
 }

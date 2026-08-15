@@ -1,7 +1,3 @@
-
-
 export default function Header() {
-  return (
-    <section>Header</section>
-  )
+  return <section>Header</section>
 }

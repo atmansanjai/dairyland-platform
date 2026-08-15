@@ -1,7 +1,3 @@
-
-
 export default function Milk() {
-  return (
-    <section>Milk</section>
-  )
+  return <section>Milk</section>
 }

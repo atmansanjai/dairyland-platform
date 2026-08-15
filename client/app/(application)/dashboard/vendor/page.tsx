@@ -1,7 +1,3 @@
-
-
 export default function Vendor() {
-  return (
-    <section>Vendor</section>
-  )
+  return <section>Vendor</section>
 }

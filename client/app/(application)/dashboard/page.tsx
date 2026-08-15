@@ -1,7 +1,3 @@
-
-
 export default function Dashboard() {
-  return (
-    <section>Dashboard</section>
-  )
+  return <section>Dashboard</section>
 }

@@ -1,7 +1,3 @@
-
-
 export default function Shipment() {
-  return (
-    <section>Shipment</section>
-  )
+  return <section>Shipment</section>
 }

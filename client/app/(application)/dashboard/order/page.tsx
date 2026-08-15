@@ -1,7 +1,3 @@
-
-
 export default function Order() {
-  return (
-    <section>Order</section>
-  )
+  return <section>Order</section>
 }

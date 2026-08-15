@@ -1,7 +1,3 @@
-
-
 export default function Customer() {
-  return (
-    <section>Customer</section>
-  )
+  return <section>Customer</section>
 }

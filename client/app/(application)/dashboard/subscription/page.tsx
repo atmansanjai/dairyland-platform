@@ -1,7 +1,3 @@
-
-
 export default function Subscription() {
-  return (
-    <section>Subscription</section>
-  )
+  return <section>Subscription</section>
 }

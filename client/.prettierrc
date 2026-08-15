@@ -8,17 +8,12 @@
   "arrowParens": "avoid",
   "endOfLine": "auto",
   "useTabs": false,
-  "tailwindFunctions": [
-    "clsx",
-    "twMerge"
-  ],
+  "tailwindFunctions": ["clsx", "twMerge"],
   "singleAttributePerLine": true,
-  "bracketSameLine": false,
+  "bracketSameLine": true,
   "jsxSingleQuote": true,
-  "jsxBracketSameLine": false,
-  "jsxSingleAttributePerLine": false,
+  "jsxBracketSameLine": true,
+  "jsxSingleAttributePerLine": true,
   "rangeStart": 0,
-  "plugins": [
-    "prettier-plugin-tailwindcss"
-  ]
+  "plugins": ["prettier-plugin-tailwindcss"]
 }
